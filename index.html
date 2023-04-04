@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-mobile-controls/dist/aframe-mobile-controls.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-asset-item id="model" src="untitled.glb"></a-asset-item>
+      </a-assets>
+      <a-entity gltf-model="#model" scale="2 2 2"></a-entity>
+      <a-camera look-controls wasd-controls mobile-controls fly-controls="acceleration: 150">
+        <a-cursor></a-cursor>
+      </a-camera>
+      <a-light type="ambient" color="#FFFFFF" intensity="0.2"></a-light>
+      <a-light type="directional" color="#FFFFFF" intensity="0.8" position="1 1 1"></a-light>
+    </a-scene>
+    <script>
+      // Demander la permission d'utiliser les capteurs de mouvement du téléphone
+      AFRAME.registerComponent('device-orientation-permission-ui', {
+        init: function () {
+          var el = this.el;
+          el.sceneEl.renderer.xr.addEventListener('sessionstart', function () {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+              DeviceOrientationEvent.requestPermission().then(response => {
+                if (response == 'granted') {
+                  console.log('Device orientation permission granted.');
+                }
+              }).catch(console.error);
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
